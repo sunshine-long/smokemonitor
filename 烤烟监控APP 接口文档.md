@@ -91,7 +91,7 @@ Userinfo {
 ### 描述：
 用于用户登录，完成稿后并绑定推送ID，用于定向推送消息。
 ### API：
-`"smokemonitor/mobile/user/login"`
+`"v1.0/user/login"`
 ### 请求方式：
 `POST`
 ### Request：
@@ -122,7 +122,7 @@ Userinfo {
 ### 描述：
 获取历史消息列表信息
 ### API:
-`"smokemonitor/mobile/message/list"`
+`"v1.0/message/lists"`
 ### 请求方式：
 `GET`
 ### Request：
@@ -166,7 +166,7 @@ Userinfo {
 ### 描述：
 用于获取消息详情信息
 ### API:
-`"smokemonitor/mobile/message/detail"`
+`"v1.0/message/lists/{messageID}"`
 ### 请求方式：
 `GET`
 ### Request：
@@ -181,6 +181,7 @@ Userinfo {
 	"code": 200,
 	"msg": "success",
 	"data": {
+		"messageID":"121",		
 		"time": "2018-10-24 10:38:44",
 		"description": "随便搞一批阿拉的文字啊，描述烟叶和烤箱的状态，就可以啦",
 		"images": ["https://s.click.taobao.com/t?e=m=2&s=7WCg0+pzKwgcQipKwQzePCperVdZeJviK7Vc7tFgwiFRAdhuF14FMa2XsNgKZ+Oxt4hWD5k2kjP/TrTNBNETjAtOHPHN0vssKO4N//7xLcVZMTj583r1vqUuZxIcp9pfUIgVEmFmgnaR4ypTBJBwtC8UTyjdhQwHJPwiig1bxLMnyi1UQ/17I10hO9fBPG8oXH+QH9e66Y4=",
