@@ -110,7 +110,7 @@ Userinfo {
 		"username": "marlon",
 		"passwords": "123456",
 		"avatar": "null",
-		"token": "string",
+		"token": "dhsfjshfdhsjdfhjdsfh",
 		"userID": 15456645585,
 		"mobile": " null",
 		"realName": "null",
@@ -126,7 +126,11 @@ Userinfo {
 ### 请求方式：
 `GET`
 ### Request：
-`null`
+```
+{
+"token:"dhsfjshfdhsjdfhjdsfh"
+}
+```
 ### Response：
 ```
 {
@@ -172,7 +176,8 @@ Userinfo {
 ### Request：
 ```
 {
-"messageID":"121"
+	"token:"dhsfjshfdhsjdfhjdsfh",
+	"messageID":"121"
 }
 ```
 ### Response：
