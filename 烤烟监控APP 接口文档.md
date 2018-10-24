@@ -91,7 +91,7 @@ Userinfo {
 ### 描述：
 用于用户登录，完成稿后并绑定推送ID，用于定向推送消息。
 ### API：
-`"v1.0/user/login"`
+`"/user/login"`
 ### 请求方式：
 `POST`
 ### Request：
@@ -122,7 +122,7 @@ Userinfo {
 ### 描述：
 获取历史消息列表信息
 ### API:
-`"v1.0/message/lists"`
+`"/message/lists"`
 ### 请求方式：
 `GET`
 ### Request：
@@ -166,7 +166,7 @@ Userinfo {
 ### 描述：
 用于获取消息详情信息
 ### API:
-`"v1.0/message/lists/{messageID}"`
+`"/message/lists/{messageID}"`
 ### 请求方式：
 `GET`
 ### Request：
