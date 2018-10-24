@@ -5,26 +5,28 @@
 IP：192.168.0.103（暂定）
 Port：8089（暂定）
 ```
-#测试目的
+# 测试目的
 
 测试烤烟过程中，相关数据推送，和紧急事件报警。
-#APP相关功能和交互流程
-###常规交互流程
+# APP相关功能和交互流程
+### 常规交互流程
 1.	登录APP，进入主页
 2.	获取烤烟历史消息列表，
 3.	点击列表中任意一项，查看交互流程
-###消息推送交互流程
+### 消息推送交互流程
 1.	收到推送消息，
 2.	点击消息，判断此时是否登录过期；
 过期，跳转到登录页面，先登录，登录成功，跳转到消息详情页；
 未过期，直接跳转到消息详情页。
-相关约定:
+# 相关约定:
+```
 BaseResponse{
 	int code; 		//成功 200，失败 非200。
 	String msg; 	//成功（返回success），失败（相关错误信息）。
-Object data;	//返回相关请求数据，这里的data，任意数据结构，没有时返回null。
+	Object data;	//返回相关请求数据，这里的data，任意数据结构，没有时返回null。
 }
-#相关类：
+```
+# 相关类：
 
 ```
 MessageBean {
@@ -39,7 +41,7 @@ MessageBean {
     //当前烤烟湿度
     private String humidity;
     //消息的类型（普通消息/紧急报警消息）
-private String type;
+    private String type;
 }
 ```
 ```
@@ -61,7 +63,7 @@ OvenStatus {
     //温度
     private String temperature;
     //湿度
-private String humidity;
+    private String humidity;
 }
 ```
 ```
@@ -85,21 +87,21 @@ Userinfo {
     private String description;
 }
 ```
-#登录
-###描述：
+# 登录
+### 描述：
 用于用户登录，完成稿后并绑定推送ID，用于定向推送消息。
-###API：
+### API：
 `"smokemonitor/mobile/user/login"`
-###请求方式：
+### 请求方式：
 `POST`
-###Request：
+### Request：
 ```
 {
 	"username": "marlon",
 	"password": "123456"   //这里可以rsa加密一下
 }
 ```
-###Response：
+### Response：
 ```
 {
 	"code": 200,
@@ -116,16 +118,16 @@ Userinfo {
 	}
 }
 ```
-#获取消息列表
-###描述：
+# 获取消息列表
+### 描述：
 获取历史消息列表信息
-###API:
+### API:
 `"smokemonitor/mobile/message/list"`
-###请求方式：
+### 请求方式：
 `GET`
-###Request：
+### Request：
 `null`
-###Response：
+### Response：
 ```
 {
 	"code": 200,
@@ -160,20 +162,20 @@ Userinfo {
 	}]
 }
 ```
-#消息详情
-###描述：
+# 消息详情
+### 描述：
 用于获取消息详情信息
-###API:
+### API:
 `"smokemonitor/mobile/message/detail"`
-###请求方式：
+### 请求方式：
 `GET`
-###Request：
+### Request：
 ```
 {
 "messageID":"121"
 }
 ```
-###Response：
+### Response：
 ```
 {
 	"code": 200,
