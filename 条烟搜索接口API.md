@@ -62,3 +62,34 @@ SmokeModel {
 	}]
 }
 ```
+### 添加新烟
+### API
+```
+"smoke/add"
+```
+### 参数
+```
+name               type                 说明
+smokeName          String	        烟名
+smokeBarCode       String	        烟条码
+smokeCoding        String               烟编码
+images             file                 烟图片                  
+```
+### 请求方式
+`POST`
+### Request
+```
+{
+"smokeName":"新烟",
+"smokeBarCode":"",
+"smokeCoding":"",
+"images":FILE,
+}
+```
+### Response
+```
+{
+"code": 200,
+"msg": "success",
+"data": null
+```
