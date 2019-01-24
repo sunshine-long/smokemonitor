@@ -43,7 +43,7 @@ SmokeModel {
     //真实姓名
     private String realName;
     //身份证号码
-    private String realName;
+    private String idCard;
     }
  ```
 # 接口
