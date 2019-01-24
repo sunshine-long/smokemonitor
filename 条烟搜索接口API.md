@@ -6,9 +6,12 @@ IP：192.168.0.103（暂定）
 Port：8088（暂定）
 ```
 # 测试目的
-
+```
 1.搜索条烟的种类，查询条烟的相关信息（包括：烟名，条码，编码，图片样式等信息）;
 2.注册新的条烟种类
+3.删除条烟
+4.更新条烟信息
+```
 
 # 相关类
 ```
@@ -249,7 +252,6 @@ smokeBarCode  | String | 烟条码
 	"data":null
 }
 ```
-
 ### 更新已有烟
 #### 请求方式
 `POST`
@@ -276,8 +278,6 @@ images | File | 烟图片
     "smokeCoding":"1101016",
     "oldimages":["https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1400792195,654294006&fm=26&gp=0.jpg", "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548150135180&di=10d9eac73420e1eb2691025f4c65e49d&imgtype=0&src=http%3A%2F%2Fpic1.16pic.com%2F00%2F10%2F57%2F16pic_1057476_b.jpg"]
     "images":FILE
-    
-    
 }
 ```
 #### 返回示例（Response）
@@ -293,7 +293,7 @@ images | File | 烟图片
 ```
 {
     "code": 非200,
-	"msg": "错误提示信息",
-	"data":null
+    "msg": "错误提示信息",
+    "data":null
 }
 ```
