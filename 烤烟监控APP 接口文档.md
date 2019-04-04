@@ -319,8 +319,6 @@ batch_number | String | 烤房编号
 ### 返回参数
 名称（name） | 类型（Type）| 说明 
 ---|---|---
-terminal_id | String | 烤房批次
-batch_number | String | 烤房编号
 temperature_setting | Arrqy | 温度曲线时间列表
 temp | String | 干球温度
 time | String | 烘烤时间
