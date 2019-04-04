@@ -301,7 +301,7 @@ batch_number | String | 烤房编号
 ### 描述：
 查询当前烤房/批次的温度曲线
 ### API:
-`"/monitor/query/terminal_account_and_batch_number"`
+`"/terminal_setting/query"`
 ### 请求方式：
 `POST`
 ### 请求参数
