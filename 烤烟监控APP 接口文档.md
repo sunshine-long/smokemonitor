@@ -1,9 +1,8 @@
-
 # 测试环境
 ```
 通信协议：http
-IP：192.168.0.103（暂定）
-Port：8089（暂定）
+IP：uwonders.ticp.net
+Port：5000
 ```
 # 测试目的
 
@@ -14,199 +13,389 @@ Port：8089（暂定）
 2.	获取烤烟历史消息列表，
 3.	点击列表中任意一项，查看交互流程
 ### 消息推送交互流程
-1.	收到推送消息，
-2.	点击消息，判断此时是否登录过期；
-过期，跳转到登录页面，先登录，登录成功，跳转到消息详情页；
-未过期，直接跳转到消息详情页。
-# 相关约定:
-```
-BaseResponse{
-	int code; 		//成功 200，失败 非200。
-	String msg; 	//成功（返回success），失败（相关错误信息）。
-	Object data;	//返回相关请求数据，这里的data，任意数据结构，没有时返回null。
-}
-```
-# 相关类：
+1.	收到推送消息（或报警），
+2.	点击消息（或报警），判断此时是否登录过期；
+3.  过期，跳转到登录页面，先登录，登录成功，跳转到消息（或报警）详情页；
+4.  未过期，直接跳转到消息（或报警）详情页。
 
-```
-MessageBean {
-    //消息ID
-    private Integer messageID;
-    //消息时间
-    private String time;
-    //当前烤烟温度
-    private String temperature;
-    //烤烟机编号
-    private String tobaccoMachineNo;
-    //当前烤烟湿度
-    private String humidity;
-    //消息的类型（普通消息/紧急报警消息）
-    private String type;
-}
-```
-```
-MessageDetailBean {
-//相关描述信息
-    private String description;
-    //对应的图片数据
-    private List<String> images;
-    //用于绘制温度湿度变化曲线
-    private List<OvenStatus> ovenStatuses;
-    //消息时间
-    private String time;
-}
-```
-```
-OvenStatus {
-    //时间
-    private String time;
-    //温度
-    private String temperature;
-    //湿度
-    private String humidity;
-}
-```
-```
-Userinfo {
-//没用的信息可以暂时不返回
-    //用户名
-    private String username;
-    //密码
-    private String passwords;
-    //头像
-    private String avatar;
-    //token
-    private String token;
-    //用户ID
-    private long userID;
-    //电话
-    private String mobile;
-    //真实姓名
-    private String realName;
-    //个人描述
-    private String description;
-}
-```
-# 登录
+# 接口
+## 登录
 ### 描述：
 用于用户登录，完成稿后并绑定推送ID，用于定向推送消息。
 ### API：
 `"/user/login"`
 ### 请求方式：
 `POST`
-### Request：
+#### 请求参数
+
+名称（name） | 类型（Type）| 说明 
+---|---|---
+userName | String | 用户名
+password | String | 密码（加密）
+#### 请求示例(Request)
 ```
 {
-	"username": "marlon",
-	"password": "123456"   //这里可以rsa加密一下
+	"userName": "marlon",
+	"password": "123456"   //加密
 }
 ```
-### Response：
+#### 返回参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+userName | String | 用户名
+password | String | 密码（加密）
+avatar   | String | 头像
+token    | String | 鉴权标识
+userID   | long | 用户ID
+mobile   | String | 手机号
+realName | String | 用户真实姓名（若实名）
+idCard   | String | 身份证号码（若实名）
+#### 返回示例（Response）
+`成功时：`
 ```
 {
-	"code": 200,
+    "code": 200,
 	"msg": "success",
 	"data": {
-		"username": "marlon",
-		"passwords": "123456",
-		"avatar": "null",
-		"token": "dhsfjshfdhsjdfhjdsfh",
-		"userID": 15456645585,
-		"mobile": " null",
-		"realName": "null",
-		"description": "null"
+	    "userName":"marlon",
+	    "password":"dkfhdklflkas15dfdjmfl",
+	    "avatar":null,
+	    "token":"jdfidjfsdkfeiepwers55df4",
+	    "userID":"1",
+	    "mobile":null,
+	    "realName":null,
+	    "idCard":null
 	}
+}
+```
+`失败时：`
+```
+{
+    "code": 非200,
+	"msg": "错误提示信息",
+	"data":null //返回null 或者不返回
 }
 ```
 # 获取消息列表
 ### 描述：
-获取历史消息列表信息
+获取消息列表信息
 ### API:
-`"/message/lists"`
+`"/monitor/query"`
 ### 请求方式：
-`GET`
-### Request：
+`POST`
+### 请求参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+token | String | 用户登录标识
+terminal_id | String | 烤房批次
+batch_number | String | 烤房编号
+### 请求示例（Request）：
 ```
 {
-"token:"dhsfjshfdhsjdfhjdsfh"
+"token:"dhsfjshfdhsjdfhjdsfh",
+"terminal_id":"uwonders",
+"batch_number":"10000061"
 }
 ```
-### Response：
+### 返回参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+start_time | String | 开始时间
+list | Array | 消息列表
+time | String | 当前图片时间
+id | String | 图片的id
+image_url | String | 图片url
+dry_bulb_temperature | String | 当前干球温度
+web_bulb_temperature | String | 当前湿球温度
+submit_time | String | 提交时间
+### 返回示例（Response）：
+`成功时：`
 ```
 {
 	"code": 200,
 	"msg": "success",
-	"data": [{
-		"time": "2018-10-24 10:38:44",
-		"messageID": "121",
-		"temperature": "60C°",
-		"humidity": "30%",
-		"tobaccoMachineNo": "NO 1",
-		"type": "normal",
-		"startTime": "2018-10-24 08:38:44",
-		"endTime": "2018-10-24 10:38:44"
-	}, {
-		"time": "2018-10-24 10:36:44",
-		"messageID": "122",
-		"temperature": "60C°",
-		"humidity": "30%",
-		"tobaccoMachineNo": "NO 1",
-		"type": "normal",
-		"startTime": "2018-10-24 08:38:44",
-		"endTime": "2018-10-24 10:38:44"
-	}, {
-		"time": "2018-10-24 10:50:44",
-		"messageID": "123",
-		"temperature": "60C°",
-		"humidity": "30%",
-		"tobaccoMachineNo": "NO 1",
-		"type": "normal",
-		"startTime": "2018-10-24 08:38:44",
-		"endTime": "2018-10-24 10:38:44"
-	}]
+	"data":
+	    "start_time":"2018-10-24 10:38:44",
+	    "list":[{
+		    "time": "2018-10-24 10:38:44",
+	    	"dry_bulb_temperature": "60C°",
+	    	"web_bulb_temperature": "30C°",
+	    	"id": "1000001",
+	    	"image_url": "http://www.hao123.com/redian/sheshouyef.htm",
+	    	"submit_time": "2018-10-24 08:38:44"
+	    }, {
+	    	"time": "2018-10-24 10:38:44",
+	    	"dry_bulb_temperature": "60C°",
+	    	"web_bulb_temperature": "30C°",
+	    	"id": "1000002",
+	    	"image_url": "http://www.hao123.com/redian/sheshouyef.htm",
+	    	"submit_time": "2018-10-24 08:38:44"
+	    }, {
+	        "time": "2018-10-24 10:38:44",
+	    	"dry_bulb_temperature": "60C°",
+	    	"web_bulb_temperature": "30C°",
+	    	"id": "1000003",
+	    	"image_url": "http://www.hao123.com/redian/sheshouyef.htm",
+	    	"submit_time": "2018-10-24 08:38:44"
+    	}]
+}
+```
+`失败时：`
+```
+{
+    "code": 非200,
+	"msg": "错误提示信息",
+	"data":null //返回null 或者不返回
 }
 ```
 # 消息详情
 ### 描述：
 用于获取消息详情信息
 ### API:
-`"/message/lists/{messageID}"`
+`"/monitor/query/id"`
 ### 请求方式：
-`GET`
-### Request：
+`POST`
+### 请求参数：
+名称（name） | 类型（Type）| 说明 
+---|---|---
+token | String | 用户登录标识
+monitor_id | String | 图片对应点ID
+### 请求示例（Request）：
 ```
 {
 	"token:"dhsfjshfdhsjdfhjdsfh",
-	"messageID":"121"
+	"monitor_id":"121"
 }
 ```
-### Response：
+### 返回参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+start_time | String | 开始时间
+list | Array | 消息列表
+time | String | 当前图片时间
+id | String | 图片的id
+image_url | String | 图片url
+dry_bulb_temperature | String | 当前干球温度
+web_bulb_temperature | String | 当前湿球温度
+submit_time | String | 提交时间
+### 返回示例（Response）：
+`成功时：`
 ```
 {
 	"code": 200,
 	"msg": "success",
-	"data": {
-		"messageID":"121",		
-		"time": "2018-10-24 10:38:44",
-		"description": "随便搞一批阿拉的文字啊，描述烟叶和烤箱的状态，就可以啦",
-		"images": ["https://s.click.taobao.com/t?e=m=2&s=7WCg0+pzKwgcQipKwQzePCperVdZeJviK7Vc7tFgwiFRAdhuF14FMa2XsNgKZ+Oxt4hWD5k2kjP/TrTNBNETjAtOHPHN0vssKO4N//7xLcVZMTj583r1vqUuZxIcp9pfUIgVEmFmgnaR4ypTBJBwtC8UTyjdhQwHJPwiig1bxLMnyi1UQ/17I10hO9fBPG8oXH+QH9e66Y4=",
-			"https://www.hao123.com/link/https/?key=http://www.baidu.com/?tn=sitehao123&&monkey=m-search-baidulogo&c=B7E43E11C0EFBBCC1D5F11E3A6A11135",
-			"https://www.hao123.com/link/https/?key=http://www.baidu.com/?tn=sitehao123&&monkey=m-search-baidulogo&c=B7E43E11C0EFBBCC1D5F11E3A6A11135",
-			"http://www.hao123.com/redian/sheshouyef.htm"
-		],
-		"ovenStatuses": [{
-			"time": "2018-10-24 10:38:44",
-			"temperature": "60C°",
-			"humidity": "30%"
-		}, {
-			"time": "2018-10-24 10:36:44",
-			"temperature": "60C°",
-			"humidity": "30%"
-		}, {
-			"time": "2018-10-24 10:50:44",
-			"temperature": "60C°",
-			"humidity": "30%"
-		}]
-	}
+	"data":
+	    "start_time":"2018-10-24 10:38:44",
+	    "list":[{
+		    "time": "2018-10-24 10:38:44",
+	    	"dry_bulb_temperature": "60C°",
+	    	"web_bulb_temperature": "30C°",
+	    	"id": "1000001",
+	    	"image_url": "http://www.hao123.com/redian/sheshouyef.htm",
+	    	"submit_time": "2018-10-24 08:38:44"
+	    }]
+}
+```
+`失败时：`
+```
+{
+    "code": 非200,
+	"msg": "错误提示信息",
+	"data":null //返回null 或者不返回
+}
+```
+# 发送获取图片请求
+### 描述：
+发送获取最新图片信息请求
+### API:
+`"/push/take_photo"`
+### 请求方式：
+`POST`
+### 请求参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+token | String | 用户登录标识
+terminal_id | String | 烤房批次
+batch_number | String | 烤房编号
+### 请求示例（Request）：
+```
+{
+"token":"dhsfjshfdhsjdfhjdsfh",
+"terminal_id":"uwonders",
+"batch_number":"10000061"
+}
+```
+### 返回参数
+`null`
+### 返回示例（Response）：
+`成功时：`
+```
+{
+    "code": 200,
+	"msg": "sccuess",
+	"data":null //返回null 或者不返回
+}
+```
+`失败时：`
+```
+{
+    "code": 非200,
+	"msg": "错误提示信息",
+	"data":null //返回null 或者不返回
+}
+```
+# 查询所有烤房和批次
+### 描述：
+查询所有烤房和批次
+### API:
+`"/monitor/query/terminal_account_and_batch_number"`
+### 请求方式：
+`POST`
+### 请求参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+token | String | 用户登录标识
+### 请求示例（Request）：
+```
+{
+    "token:"dhsfjshfdhsjdfhjdsfh"
+}
+```
+### 返回参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+terminal_id | String | 烤房批次
+batch_number | String | 烤房编号
+### 返回示例（Response）：
+`成功时：`
+```
+{
+    "code": 200,
+	"msg": "sccuess",
+	"data":[{
+	    "terminal_id":"uwonders",
+	    "batch_number":"10000060"
+	},{
+	    "terminal_id":"uwonders",
+	    "batch_number":"10000061"
+	},{
+	    "terminal_id":"uwonders",
+	    "batch_number":"10000062"
+	},{
+	    "terminal_id":"uwonders",
+	    "batch_number":"10000063"
+	}]
+}
+```
+`失败时：`
+```
+{
+    "code": 非200,
+	"msg": "错误提示信息",
+	"data":null //返回null 或者不返回
+}
+```
+# 查询温度曲线
+### 描述：
+查询当前烤房/批次的温度曲线
+### API:
+`"/monitor/query/terminal_account_and_batch_number"`
+### 请求方式：
+`POST`
+### 请求参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+token | String | 用户登录标识
+terminal_id | String | 烤房批次
+batch_number | String | 烤房编号
+### 请求示例（Request）：
+```
+{
+    "token:"dhsfjshfdhsjdfhjdsfh",
+    "terminal_id":"uwonders",
+    "batch_number":"10000061"
+}
+```
+### 返回参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+terminal_id | String | 烤房批次
+batch_number | String | 烤房编号
+temperature_setting | Arrqy | 温度曲线时间列表
+temp | String | 干球温度
+time | String | 烘烤时间
+### 返回示例（Response）：
+`成功时：`
+```
+{
+    "code": 200,
+	"msg": "sccuess",
+	"data":
+	"temperature_setting":[{
+	   "temp": 0,
+	   "time": 0
+	    },{
+	   "temp": 34,
+	   "time": 10
+	},{
+	   "temp": 34,
+	   "time": 20
+	},{
+	    "temp": 34,
+	    "time": 40
+	}]
+}
+```
+`失败时：`
+```
+{
+    "code": 非200,
+	"msg": "错误提示信息",
+	"data":null //返回null 或者不返回
+}
+```
+# 设置温度曲线
+### 描述：
+设置当前烤房/批次的温度曲线
+### API:
+`"/push/set_temperature"`
+### 请求方式：
+`POST`
+### 请求参数
+名称（name） | 类型（Type）| 说明 
+---|---|---
+token | String | 用户登录标识
+terminal_id | String | 烤房批次
+dry_bulb_temperature | String | 设置干球温度
+dry_bulb_temperature_duration | String | 设置烘烤时间
+time | String | 开始烘烤时间点
+### 请求示例（Request）：
+```
+{
+    "token:"dhsfjshfdhsjdfhjdsfh",
+    "terminal_id":"uwonders",
+    "batch_number":"10000061"
+    "dry_bulb_temperature:"80",
+    "dry_bulb_temperature_duration":"20",
+    "time":"15"
+}
+```
+### 返回参数
+`null`
+### 返回示例（Response）：
+`成功时：`
+```
+{
+    "code": 200,
+	"msg": "success",
+	"data":null //返回null 或者不返回
+}
+```
+`失败时：`
+```
+{
+    "code": 非200,
+	"msg": "错误提示信息",
+	"data":null //返回null 或者不返回
 }
 ```
