@@ -92,7 +92,7 @@ batch_number | String | 烤房编号
 ### 请求示例（Request）：
 ```
 {
-"token:"dhsfjshfdhsjdfhjdsfh",
+"token":"dhsfjshfdhsjdfhjdsfh",
 "terminal_id":"uwonders",
 "batch_number":"10000061"
 }
@@ -311,7 +311,7 @@ batch_number | String | 烤房编号
 ### 请求示例（Request）：
 ```
 {
-    "token:"dhsfjshfdhsjdfhjdsfh",
+    "token":"dhsfjshfdhsjdfhjdsfh",
     "terminal_id":"uwonders",
     "batch_number":"10000061"
 }
@@ -372,7 +372,7 @@ time | String | 开始烘烤时间点
 ### 请求示例（Request）：
 ```
 {
-    "token:"dhsfjshfdhsjdfhjdsfh",
+    "token":"dhsfjshfdhsjdfhjdsfh",
     "terminal_id":"uwonders",
     "batch_number":"10000061"
     "dry_bulb_temperature:"80",
